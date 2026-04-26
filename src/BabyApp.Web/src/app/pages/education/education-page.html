@@ -1,0 +1,19 @@
+<header class="top">
+  <a routerLink="/babies" class="back">← Bebe</a>
+  <h1>Edukacija po uzrastu</h1>
+</header>
+
+<div class="tabs">
+  <button type="button" (click)="setBand(null)">Sve</button>
+  <button type="button" (click)="setBand(0)">0–3 mj</button>
+  <button type="button" (click)="setBand(1)">3–6 mj</button>
+  <button type="button" (click)="setBand(2)">6–12 mj</button>
+</div>
+
+@for (a of articles(); track a.id) {
+  <article class="card">
+    <h2>{{ a.title }}</h2>
+    <p class="band">{{ a.ageBand }}</p>
+    <p>{{ a.body }}</p>
+  </article>
+}

@@ -1,0 +1,53 @@
+<h1>Rast</h1>
+
+@if (ref(); as r) {
+  <section class="panel">
+    <h2>Referentni rasponi (pojednostavljeno)</h2>
+    <label
+      >Datum
+      <input
+        type="date"
+        [value]="refDate"
+        (change)="refDate = ($any($event.target).value); loadRef()"
+    /></label>
+    <p>Dob (cjelina mj) na datum: {{ r.ageWholeMonthsOnDate }}</p>
+    <p>Težina kg: {{ r.weightKg.min }} – {{ r.weightKg.max }} ({{ r.weightKg.note }})</p>
+    <p>Visina cm: {{ r.heightCm.min }} – {{ r.heightCm.max }}</p>
+    <p>Obim glave cm: {{ r.headCm.min }} – {{ r.headCm.max }}</p>
+  </section>
+}
+
+<section class="panel">
+  <h2>Unos mjerenja</h2>
+  <p class="hint">U profilu bebe postavi spol za preciznije raspone (inače se koristi ženski kao default na API-ju).</p>
+  <form [formGroup]="form" (ngSubmit)="add()">
+    <label>Datum <input type="date" formControlName="measuredDate" /></label>
+    <label>Težina kg <input type="number" step="0.001" formControlName="weightKg" /></label>
+    <label>Visina cm <input type="number" step="0.1" formControlName="heightCm" /></label>
+    <label>Obim glave cm <input type="number" step="0.1" formControlName="headCm" /></label>
+    <label>Napomena <input formControlName="notes" /></label>
+    <button type="submit" [disabled]="form.invalid">Spremi</button>
+  </form>
+</section>
+
+<section class="panel">
+  <h2>Graf težine</h2>
+  <canvas #chart height="120"></canvas>
+</section>
+
+<ul>
+  @for (g of rows(); track g.id) {
+    <li>
+      {{ g.measuredDate }} —
+      @if (g.weightKg != null) {
+        {{ g.weightKg }} kg
+      }
+      @if (g.heightCm != null) {
+        · {{ g.heightCm }} cm
+      }
+      @if (g.headCircumferenceCm != null) {
+        · glava {{ g.headCircumferenceCm }} cm
+      }
+    </li>
+  }
+</ul>

@@ -1,0 +1,40 @@
+# .NET
+**/bin/
+**/obj/
+**/out/
+*.user
+*.suo
+*.cache
+*.dll
+*.pdb
+*.log
+.vs/
+*.DotSettings.user
+
+# EF / lokalna baza (opcionalno — ukloni liniju ako želiš commitati migracije; migracije ŽELIMO)
+# *.db
+# *.mdf
+
+# Angular / Node
+**/node_modules/
+**/.angular/
+dist/
+.angular/
+
+# IDE
+.idea/
+*.swp
+*~
+
+# OS
+Thumbs.db
+Desktop.ini
+.DS_Store
+
+# Env tajne (ako dodaš)
+.env
+.env.local
+**/appsettings.*.local.json
+
+# Cursor / tooling (opcionalno)
+.cursor/

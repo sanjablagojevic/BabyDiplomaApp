@@ -1,0 +1,22 @@
+form {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  max-width: 22rem;
+  margin-bottom: 1rem;
+}
+
+label {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+  font-size: 0.875rem;
+}
+
+button.del {
+  margin-left: 0.5rem;
+  border: none;
+  background: transparent;
+  color: #b91c1c;
+  cursor: pointer;
+}

@@ -1,0 +1,36 @@
+.card {
+  border: 1px solid #e5e7eb;
+  border-radius: 0.75rem;
+  padding: 1rem 1.1rem;
+  margin-bottom: 1rem;
+  background: #fff;
+}
+
+h1 {
+  margin: 0 0 0.35rem;
+  font-size: 1.35rem;
+}
+
+h2 {
+  margin: 0 0 0.5rem;
+  font-size: 1.05rem;
+}
+
+.meta {
+  color: #4b5563;
+  margin: 0 0 0.5rem;
+}
+
+.hint {
+  color: #6b7280;
+  font-size: 0.875rem;
+}
+
+.error {
+  color: #b91c1c;
+}
+
+ul {
+  margin: 0;
+  padding-left: 1.2rem;
+}

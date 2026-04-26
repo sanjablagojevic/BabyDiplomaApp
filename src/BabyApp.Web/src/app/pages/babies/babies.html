@@ -1,0 +1,58 @@
+<div class="layout">
+  <header class="top">
+    <h1>Baby App</h1>
+    <nav>
+      <a routerLink="/babies">Bebe</a>
+      <a routerLink="/education">Savjeti</a>
+      <button type="button" class="linkish" (click)="logout()">Odjava</button>
+    </nav>
+  </header>
+
+  <section class="panel">
+    <h2>Dodaj bebu</h2>
+    <form [formGroup]="form" (ngSubmit)="create()">
+      <label> Ime <input formControlName="name" /></label>
+      <label> Datum rođenja <input type="date" formControlName="dateOfBirth" /></label>
+      <label>
+        Spol
+        <select formControlName="sex">
+          <option [value]="0">Nepoznato</option>
+          <option [value]="1">Muško</option>
+          <option [value]="2">Žensko</option>
+        </select>
+      </label>
+      <label>
+        Rutina mlijeka (do ~4,5 mj)
+        <select formControlName="infantMilkRoutine">
+          <option [value]="-1">—</option>
+          <option [value]="0">Flaša</option>
+          <option [value]="1">Dojenje</option>
+        </select>
+      </label>
+      <label>
+        Cilj čvrstih obroka/dan
+        <input type="number" min="0" max="6" formControlName="solidMealsPerDayGoal" />
+      </label>
+      <button type="submit" [disabled]="form.invalid">Spremi</button>
+    </form>
+  </section>
+
+  <section class="panel">
+    <h2>Tvoje bebe</h2>
+    @if (loadError()) {
+      <p class="error">{{ loadError() }}</p>
+    }
+    <ul>
+      @for (b of babies(); track b.id) {
+        <li>
+          <button type="button" class="babybtn" (click)="openBaby(b.id)">
+            <strong>{{ b.name }}</strong> — rođena {{ b.dateOfBirth }}
+          </button>
+        </li>
+      } @empty {
+        <li class="muted">Još nema unosa. Dodaj prvu bebu iznad.</li>
+      }
+    </ul>
+    <button type="button" class="secondary" (click)="refresh()">Osvježi</button>
+  </section>
+</div>

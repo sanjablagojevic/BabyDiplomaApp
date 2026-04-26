@@ -1,0 +1,106 @@
+:host {
+  display: block;
+  font-family: system-ui, sans-serif;
+  max-width: 40rem;
+  margin: 0 auto;
+  padding: 1.5rem;
+}
+
+.layout {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.top h1 {
+  margin: 0;
+  font-size: 1.35rem;
+}
+
+nav {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+a {
+  color: #2563eb;
+}
+
+.panel {
+  padding: 1rem 1.1rem;
+  border: 1px solid #e5e7eb;
+  border-radius: 0.75rem;
+  background: #fafafa;
+}
+
+.panel h2 {
+  margin: 0 0 0.75rem;
+  font-size: 1.05rem;
+}
+
+form {
+  display: flex;
+  flex-direction: column;
+  gap: 0.65rem;
+}
+
+label {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+  font-size: 0.875rem;
+}
+
+input {
+  padding: 0.45rem 0.55rem;
+  border-radius: 0.375rem;
+  border: 1px solid #d1d5db;
+}
+
+button {
+  align-self: flex-start;
+  padding: 0.45rem 0.9rem;
+  border-radius: 0.375rem;
+  border: none;
+  background: #2563eb;
+  color: #fff;
+  cursor: pointer;
+}
+
+button.secondary {
+  margin-top: 0.75rem;
+  background: #6b7280;
+}
+
+button:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+.linkish {
+  background: transparent;
+  color: #374151;
+  border: 1px solid #d1d5db;
+}
+
+ul {
+  padding-left: 1.1rem;
+  margin: 0.25rem 0 0;
+}
+
+.error {
+  color: #b91c1c;
+  font-size: 0.875rem;
+}
+
+.muted {
+  color: #6b7280;
+}

@@ -1,0 +1,45 @@
+.shell {
+  font-family: system-ui, sans-serif;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.bar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem 1rem;
+  padding: 0.65rem 1rem;
+  border-bottom: 1px solid #e5e7eb;
+  background: #f9fafb;
+}
+
+nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem 0.75rem;
+}
+
+a {
+  color: #1d4ed8;
+  text-decoration: none;
+  font-size: 0.875rem;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+.back {
+  font-weight: 600;
+}
+
+.edu {
+  margin-left: auto;
+}
+
+main {
+  padding: 1rem 1.25rem;
+  flex: 1;
+}

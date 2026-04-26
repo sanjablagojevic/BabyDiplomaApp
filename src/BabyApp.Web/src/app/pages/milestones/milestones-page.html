@@ -1,0 +1,40 @@
+<h1>Razvojne prekretnice</h1>
+
+@if (progress(); as p) {
+  <p>Ukupni napredak: {{ p.completionPercent }}% (dob ~{{ p.ageWeeksApprox }} tjedana)</p>
+  @for (i of p.items; track i.key) {
+    <div class="row">
+      <div class="info">
+        <strong>{{ i.title }}</strong>
+        <span class="muted">tipično {{ i.typicalFromWeeks }}–{{ i.typicalToWeeks }} tj</span>
+        @if (i.achieved) {
+          <span class="ok">✓ {{ i.achievedOn }}</span>
+        } @else if (i.inTypicalWindowNow) {
+          <span class="watch">u tipičnom prozoru</span>
+        }
+      </div>
+      <div class="bar">
+        <div class="fill" [style.width.%]="i.achieved ? 100 : i.inTypicalWindowNow ? 55 : 15"></div>
+      </div>
+    </div>
+  }
+}
+
+<section class="panel">
+  <h2>Označi postignuće</h2>
+  <form [formGroup]="form" (ngSubmit)="save()">
+    <label>
+      Prekretnica
+      <select formControlName="milestone">
+        <option [value]="0">Podizanje glave</option>
+        <option [value]="1">Sjedenje</option>
+        <option [value]="2">Pužanje</option>
+        <option [value]="3">Prvi koraci</option>
+        <option [value]="4">Prve riječi</option>
+      </select>
+    </label>
+    <label>Datum <input type="date" formControlName="achievedOn" /></label>
+    <label>Napomena <input formControlName="notes" /></label>
+    <button type="submit" [disabled]="form.invalid">Spremi</button>
+  </form>
+</section>

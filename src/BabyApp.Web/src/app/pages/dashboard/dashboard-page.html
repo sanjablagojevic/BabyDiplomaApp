@@ -1,0 +1,21 @@
+@if (err()) {
+  <p class="error">{{ err() }}</p>
+}
+@if (data(); as d) {
+  <section class="card">
+    <h1>{{ d.baby.name }}</h1>
+    <p class="meta">
+      Dob: ~{{ d.ageMonthsApprox | number: '1.1-1' }} mj (cjelina {{ d.ageWholeMonths }} mj) · skupina: {{ d.ageBand }}
+    </p>
+    <p>{{ d.isYoungInfantUnderFourAndHalfMonths ? 'Fokus na mlijeko / 3h rutinu.' : 'Možeš pratiti čvrstu hranu i dremke.' }}</p>
+  </section>
+  <section class="card">
+    <h2>Dostupni moduli (po uzrastu)</h2>
+    <ul>
+      @for (m of d.availableModules; track m) {
+        <li>{{ m }}</li>
+      }
+    </ul>
+    <p class="hint">Koristi izbornik iznad za unos i pregled.</p>
+  </section>
+}

@@ -1,0 +1,32 @@
+<h1>Reakcije</h1>
+<p>Alergije, odbijanje hrane, zatvor — evidencija za pedijatra.</p>
+
+<form [formGroup]="form" (ngSubmit)="add()">
+  <label>Kada <input type="datetime-local" formControlName="when" /></label>
+  <label>
+    Vrsta
+    <select formControlName="kind">
+      <option [value]="0">Alergija / sumnjiva reakcija</option>
+      <option [value]="1">Odbijanje hrane</option>
+      <option [value]="2">Zatvor</option>
+    </select>
+  </label>
+  <label>Hrana (okidač) <input formControlName="food" /></label>
+  <label>Napomena <input formControlName="notes" /></label>
+  <button type="submit" [disabled]="form.invalid">Dodaj</button>
+</form>
+
+<ul>
+  @for (r of rows(); track r.id) {
+    <li>
+      {{ r.occurredUtc | date: 'short' }} — <strong>{{ r.kind }}</strong>
+      @if (r.foodTrigger) {
+        ({{ r.foodTrigger }})
+      }
+      @if (r.notes) {
+        — {{ r.notes }}
+      }
+      <button type="button" class="del" (click)="remove(r)">Obriši</button>
+    </li>
+  }
+</ul>

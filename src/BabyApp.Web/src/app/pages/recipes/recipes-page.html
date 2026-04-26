@@ -1,0 +1,16 @@
+<h1>Recepti</h1>
+<p class="muted">PDF stavi u API <code>wwwroot/recipes</code> i u bazi <code>pdfFileName</code> (npr. <code>moj-recept.pdf</code>).</p>
+<label>Max dob (mj) <input type="number" min="1" max="24" placeholder="sve" (change)="setMaxAge($event)" /></label>
+<ul>
+  @for (r of items(); track r.id) {
+    <li>
+      <strong>{{ r.title }}</strong> (od {{ r.minAgeMonths }} mj)
+      @if (r.summary) {
+        — {{ r.summary }}
+      }
+      @if (r.pdfFileName) {
+        — <button type="button" class="linkbtn" (click)="download(r)">Preuzmi PDF</button>
+      }
+    </li>
+  }
+</ul>

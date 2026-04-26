@@ -1,0 +1,62 @@
+<h1>San i dremke</h1>
+
+<section class="panel">
+  <h2>Jutarnje buđenje</h2>
+  <form [formGroup]="wakeForm" (ngSubmit)="saveWake()">
+    <label>Datum <input type="date" formControlName="forDate" /></label>
+    <label>Vrijeme <input type="time" formControlName="morningWakeTime" /></label>
+    <button type="submit">Spremi</button>
+    <button type="button" class="secondary" (click)="loadPlan()">Osvježi plan</button>
+  </form>
+  @if (planErr()) {
+    <p class="warn">{{ planErr() }}</p>
+  }
+</section>
+
+@if (plan(); as p) {
+  <section class="panel">
+    <h2>Plan dremki (heuristika)</h2>
+    <p>{{ p.notes }}</p>
+    <p>Broj dremki: {{ p.napCount }} · prozor buđenosti: {{ p.suggestedWakeWindowMinutes }} min</p>
+    <p>Večernji spavanac: {{ p.bedtimeWindowHint }} · predloženo oko {{ p.suggestedBedtimeStartLocal }}</p>
+    <ul>
+      @for (n of p.naps; track n.order) {
+        <li>Dremka {{ n.order }}: ~{{ n.suggestedStartLocal }} ({{ n.typicalDurationMinutes }} min)</li>
+      }
+    </ul>
+  </section>
+}
+
+<section class="panel">
+  <h2>Uspavanke / zvukovi</h2>
+  <ul>
+    @for (a of audio(); track a.title) {
+      <li>
+        <strong>{{ a.title }}</strong> ({{ a.kind }})
+        @if (a.url) {
+          — <a [href]="a.url!" target="_blank" rel="noopener">otvori</a>
+        }
+      </li>
+    }
+  </ul>
+</section>
+
+<section class="panel">
+  <h2>Evidencija sna (Baby Buddy stil)</h2>
+  <form [formGroup]="sessionForm" (ngSubmit)="addSession()">
+    <label>Početak <input type="datetime-local" formControlName="start" /></label>
+    <label>Kraj <input type="datetime-local" formControlName="end" /></label>
+    <label><input type="checkbox" formControlName="isNap" /> Dremka</label>
+    <label>Napomena <input formControlName="notes" /></label>
+    <button type="submit" [disabled]="sessionForm.invalid">Dodaj</button>
+  </form>
+  <ul class="sessions">
+    @for (s of sessions(); track s.id) {
+      <li>
+        {{ s.startUtc | date: 'short' }} — {{ s.endUtc ? (s.endUtc | date: 'short') : '…' }}
+        ({{ s.isNap ? 'dremka' : 'noć' }})
+        <button type="button" class="linkish" (click)="removeSession(s)">Obriši</button>
+      </li>
+    }
+  </ul>
+</section>

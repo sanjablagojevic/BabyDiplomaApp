@@ -1,0 +1,36 @@
+<div class="auth-page">
+  <div class="auth-visual">
+    <img
+      class="auth-hero-img"
+      src="/auth-illustration.svg"
+      width="420"
+      height="420"
+      alt="Svijetla ilustracija roditelja i bebe"
+    />
+    <div class="auth-brand">
+      <strong>Baby App</strong>
+      <span>Praćenje sna, hrane i razvoja na jednom mjestu.</span>
+    </div>
+  </div>
+  <div class="auth-panel">
+    <div class="card">
+      <h1>Prijava</h1>
+      <p class="lead">Dobrodošla natrag — nastavi gdje si stala.</p>
+      <form [formGroup]="form" (ngSubmit)="submit()">
+        <label>
+          Email
+          <input type="email" formControlName="email" autocomplete="username" />
+        </label>
+        <label>
+          Lozinka
+          <input type="password" formControlName="password" autocomplete="current-password" />
+        </label>
+        @if (errorMessage) {
+          <p class="error">{{ errorMessage }}</p>
+        }
+        <button type="submit" [disabled]="form.invalid">Prijavi se</button>
+      </form>
+      <p class="muted">Nemaš račun? <a routerLink="/register">Registracija</a></p>
+    </div>
+  </div>
+</div>
