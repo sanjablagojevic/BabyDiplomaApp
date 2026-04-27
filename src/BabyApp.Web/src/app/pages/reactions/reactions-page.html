@@ -1,32 +1,68 @@
-<h1>Reakcije</h1>
-<p>Alergije, odbijanje hrane, zatvor — evidencija za pedijatra.</p>
+<div class="reactions-page">
+  <header class="page-head">
+    <h1>Reakcije</h1>
+    <p>Alergije, odbijanje hrane i zatvor — evidencija za pregled i pedijatra.</p>
+  </header>
 
-<form [formGroup]="form" (ngSubmit)="add()">
-  <label>Kada <input type="datetime-local" formControlName="when" /></label>
-  <label>
-    Vrsta
-    <select formControlName="kind">
-      <option [value]="0">Alergija / sumnjiva reakcija</option>
-      <option [value]="1">Odbijanje hrane</option>
-      <option [value]="2">Zatvor</option>
-    </select>
-  </label>
-  <label>Hrana (okidač) <input formControlName="food" /></label>
-  <label>Napomena <input formControlName="notes" /></label>
-  <button type="submit" [disabled]="form.invalid">Dodaj</button>
-</form>
+  <section class="panel">
+    <h2>Dodaj reakciju</h2>
+    <form [formGroup]="form" (ngSubmit)="add()">
+      <label>
+        Kada
+        <input type="datetime-local" formControlName="when" />
+      </label>
+      <label>
+        Vrsta
+        <select formControlName="kind">
+          <option [value]="0">Alergija / sumnjiva reakcija</option>
+          <option [value]="1">Odbijanje hrane</option>
+          <option [value]="2">Zatvor</option>
+        </select>
+      </label>
+      <label>
+        Hrana (okidač)
+        <input formControlName="food" placeholder="npr. jaje, kikiriki, jogurt..." />
+      </label>
+      <label>
+        Napomena
+        <input formControlName="notes" placeholder="simptomi, trajanje, intenzitet..." />
+      </label>
+      <button type="submit" [disabled]="form.invalid">Spremi reakciju</button>
+    </form>
+  </section>
 
-<ul>
-  @for (r of rows(); track r.id) {
-    <li>
-      {{ r.occurredUtc | date: 'short' }} — <strong>{{ r.kind }}</strong>
-      @if (r.foodTrigger) {
-        ({{ r.foodTrigger }})
+  <section class="panel">
+    <h2>Zadnje reakcije (60 dana)</h2>
+    <ul class="rows">
+      @for (r of rows(); track r.id) {
+        <li class="row-item">
+          <div class="row-top">
+            <span
+              class="kind-pill"
+              [class.kind-pill--allergy]="r.kind === 'Allergy'"
+              [class.kind-pill--refusal]="r.kind === 'FoodRefusal'"
+              [class.kind-pill--constipation]="r.kind === 'Constipation'"
+              >{{ r.kind }}</span
+            >
+            <strong>{{ r.occurredUtc | date: 'short' }}</strong>
+          </div>
+
+          <div class="row-meta">
+            @if (r.foodTrigger) {
+              <span>Okidač: {{ r.foodTrigger }}</span>
+            } @else {
+              <span class="muted">Okidač nije upisan</span>
+            }
+            @if (r.notes) {
+              <span>Napomena: {{ r.notes }}</span>
+            }
+          </div>
+
+          <button type="button" class="del" (click)="remove(r)">Obriši</button>
+        </li>
+      } @empty {
+        <li class="empty">Nema evidentiranih reakcija u zadnjih 60 dana.</li>
       }
-      @if (r.notes) {
-        — {{ r.notes }}
-      }
-      <button type="button" class="del" (click)="remove(r)">Obriši</button>
-    </li>
-  }
-</ul>
+    </ul>
+  </section>
+</div>

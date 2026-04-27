@@ -1,53 +1,86 @@
-<h1>Rast</h1>
+<div class="growth-page">
+  <header class="page-head">
+    <h1>Rast</h1>
+    <p>Prati mjerenja, uporedi sa referentnim rasponima i brzo vidi trend težine.</p>
+  </header>
 
-@if (ref(); as r) {
-  <section class="panel">
-    <h2>Referentni rasponi (pojednostavljeno)</h2>
-    <label
-      >Datum
-      <input
-        type="date"
-        [value]="refDate"
-        (change)="refDate = ($any($event.target).value); loadRef()"
-    /></label>
-    <p>Dob (cjelina mj) na datum: {{ r.ageWholeMonthsOnDate }}</p>
-    <p>Težina kg: {{ r.weightKg.min }} – {{ r.weightKg.max }} ({{ r.weightKg.note }})</p>
-    <p>Visina cm: {{ r.heightCm.min }} – {{ r.heightCm.max }}</p>
-    <p>Obim glave cm: {{ r.headCm.min }} – {{ r.headCm.max }}</p>
-  </section>
-}
+  @if (ref(); as r) {
+    <section class="panel panel--ref">
+      <div class="panel-head">
+        <h2>Referentni rasponi</h2>
+        <label class="date-filter">
+          <span>Datum</span>
+          <input
+            type="date"
+            [value]="refDate"
+            (change)="refDate = ($any($event.target).value); loadRef()"
+          />
+        </label>
+      </div>
 
-<section class="panel">
-  <h2>Unos mjerenja</h2>
-  <p class="hint">U profilu bebe postavi spol za preciznije raspone (inače se koristi ženski kao default na API-ju).</p>
-  <form [formGroup]="form" (ngSubmit)="add()">
-    <label>Datum <input type="date" formControlName="measuredDate" /></label>
-    <label>Težina kg <input type="number" step="0.001" formControlName="weightKg" /></label>
-    <label>Visina cm <input type="number" step="0.1" formControlName="heightCm" /></label>
-    <label>Obim glave cm <input type="number" step="0.1" formControlName="headCm" /></label>
-    <label>Napomena <input formControlName="notes" /></label>
-    <button type="submit" [disabled]="form.invalid">Spremi</button>
-  </form>
-</section>
-
-<section class="panel">
-  <h2>Graf težine</h2>
-  <canvas #chart height="120"></canvas>
-</section>
-
-<ul>
-  @for (g of rows(); track g.id) {
-    <li>
-      {{ g.measuredDate }} —
-      @if (g.weightKg != null) {
-        {{ g.weightKg }} kg
-      }
-      @if (g.heightCm != null) {
-        · {{ g.heightCm }} cm
-      }
-      @if (g.headCircumferenceCm != null) {
-        · glava {{ g.headCircumferenceCm }} cm
-      }
-    </li>
+      <div class="ref-grid">
+        <article>
+          <span class="k">Dob</span>
+          <strong>{{ r.ageWholeMonthsOnDate }} mj</strong>
+        </article>
+        <article>
+          <span class="k">Težina</span>
+          <strong>{{ r.weightKg.min }} – {{ r.weightKg.max }} kg</strong>
+          <small>{{ r.weightKg.note }}</small>
+        </article>
+        <article>
+          <span class="k">Visina</span>
+          <strong>{{ r.heightCm.min }} – {{ r.heightCm.max }} cm</strong>
+        </article>
+        <article>
+          <span class="k">Obim glave</span>
+          <strong>{{ r.headCm.min }} – {{ r.headCm.max }} cm</strong>
+        </article>
+      </div>
+    </section>
   }
-</ul>
+
+  <section class="panel">
+    <h2>Unos mjerenja</h2>
+    <p class="hint">
+      U profilu bebe postavi spol za preciznije raspone (inače API koristi ženski default).
+    </p>
+    <form [formGroup]="form" (ngSubmit)="add()">
+      <label><span>Datum</span><input type="date" formControlName="measuredDate" /></label>
+      <label><span>Težina (kg)</span><input type="number" step="0.001" formControlName="weightKg" /></label>
+      <label><span>Visina (cm)</span><input type="number" step="0.1" formControlName="heightCm" /></label>
+      <label><span>Obim glave (cm)</span><input type="number" step="0.1" formControlName="headCm" /></label>
+      <label class="notes"><span>Napomena</span><input formControlName="notes" /></label>
+      <button type="submit" [disabled]="form.invalid">Spremi mjerenje</button>
+    </form>
+  </section>
+
+  <section class="panel panel--chart">
+    <h2>Graf težine</h2>
+    <canvas #chart height="120"></canvas>
+  </section>
+
+  <section class="panel">
+    <h2>Istorija mjerenja</h2>
+    <ul class="history">
+      @for (g of rows(); track g.id) {
+        <li>
+          <strong>{{ g.measuredDate }}</strong>
+          <div class="vals">
+            @if (g.weightKg != null) {
+              <span>⚖️ {{ g.weightKg }} kg</span>
+            }
+            @if (g.heightCm != null) {
+              <span>📏 {{ g.heightCm }} cm</span>
+            }
+            @if (g.headCircumferenceCm != null) {
+              <span>🧠 {{ g.headCircumferenceCm }} cm</span>
+            }
+          </div>
+        </li>
+      } @empty {
+        <li class="empty">Još nema mjerenja.</li>
+      }
+    </ul>
+  </section>
+</div>

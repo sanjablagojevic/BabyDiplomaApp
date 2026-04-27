@@ -47,7 +47,12 @@ export class ReactionsPage implements OnInit {
         foodTrigger: v.food || null,
         notes: v.notes || null,
       })
-      .subscribe({ next: () => this.refresh() });
+      .subscribe({
+        next: () => {
+          this.refresh();
+          this.form.patchValue({ food: '', notes: '' });
+        },
+      });
   }
 
   remove(x: ReactionDto): void {

@@ -1,40 +1,62 @@
-<h1>Razvojne prekretnice</h1>
+<div class="milestones-page">
+  <header class="page-head">
+    <h1>Razvojne prekretnice</h1>
+    <p>Prati napredak bebe kroz ključne razvojne faze i bilježi postignuća.</p>
+  </header>
 
-@if (progress(); as p) {
-  <p>Ukupni napredak: {{ p.completionPercent }}% (dob ~{{ p.ageWeeksApprox }} tjedana)</p>
-  @for (i of p.items; track i.key) {
-    <div class="row">
-      <div class="info">
-        <strong>{{ i.title }}</strong>
-        <span class="muted">tipično {{ i.typicalFromWeeks }}–{{ i.typicalToWeeks }} tj</span>
-        @if (i.achieved) {
-          <span class="ok">✓ {{ i.achievedOn }}</span>
-        } @else if (i.inTypicalWindowNow) {
-          <span class="watch">u tipičnom prozoru</span>
+  @if (progress(); as p) {
+    <section class="summary">
+      <div>
+        <span class="k">Ukupni napredak</span>
+        <strong>{{ p.completionPercent }}%</strong>
+      </div>
+      <div>
+        <span class="k">Procijenjena dob</span>
+        <strong>{{ p.ageWeeksApprox }} sedmica</strong>
+      </div>
+    </section>
+
+    <section class="panel">
+      <h2>Status prekretnica</h2>
+      <div class="rows">
+        @for (i of p.items; track i.key) {
+          <article class="row">
+            <div class="info">
+              <strong>{{ i.title }}</strong>
+              <span class="muted">tipično {{ i.typicalFromWeeks }}–{{ i.typicalToWeeks }} tj</span>
+              @if (i.achieved) {
+                <span class="ok">✓ postignuto {{ i.achievedOn }}</span>
+              } @else if (i.inTypicalWindowNow) {
+                <span class="watch">u tipičnom prozoru</span>
+              } @else {
+                <span class="muted">još nije u fokusu</span>
+              }
+            </div>
+            <div class="bar">
+              <div class="fill" [style.width.%]="i.achieved ? 100 : i.inTypicalWindowNow ? 55 : 15"></div>
+            </div>
+          </article>
         }
       </div>
-      <div class="bar">
-        <div class="fill" [style.width.%]="i.achieved ? 100 : i.inTypicalWindowNow ? 55 : 15"></div>
-      </div>
-    </div>
+    </section>
   }
-}
 
-<section class="panel">
-  <h2>Označi postignuće</h2>
-  <form [formGroup]="form" (ngSubmit)="save()">
-    <label>
-      Prekretnica
-      <select formControlName="milestone">
-        <option [value]="0">Podizanje glave</option>
-        <option [value]="1">Sjedenje</option>
-        <option [value]="2">Pužanje</option>
-        <option [value]="3">Prvi koraci</option>
-        <option [value]="4">Prve riječi</option>
-      </select>
-    </label>
-    <label>Datum <input type="date" formControlName="achievedOn" /></label>
-    <label>Napomena <input formControlName="notes" /></label>
-    <button type="submit" [disabled]="form.invalid">Spremi</button>
-  </form>
-</section>
+  <section class="panel">
+    <h2>Označi postignuće</h2>
+    <form [formGroup]="form" (ngSubmit)="save()">
+      <label>
+        <span>Prekretnica</span>
+        <select formControlName="milestone">
+          <option [value]="0">Podizanje glave</option>
+          <option [value]="1">Sjedenje</option>
+          <option [value]="2">Pužanje</option>
+          <option [value]="3">Prvi koraci</option>
+          <option [value]="4">Prve riječi</option>
+        </select>
+      </label>
+      <label><span>Datum</span><input type="date" formControlName="achievedOn" /></label>
+      <label class="notes"><span>Napomena</span><input formControlName="notes" /></label>
+      <button type="submit" [disabled]="form.invalid">Spremi</button>
+    </form>
+  </section>
+</div>
