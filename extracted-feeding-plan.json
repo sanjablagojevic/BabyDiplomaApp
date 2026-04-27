@@ -1,0 +1,60 @@
+{
+  "sourcePdf": "C:\\Users\\sanja\\Downloads\\1737799035113543_50a76f96-15b0-4ef0-ade7-687936951766.pdf",
+  "title": "Plan uvođenja nemliječne ishrane za bebu",
+  "language": "bs/hr/sr",
+  "notes": {
+    "edmu": "ekstra djevičansko maslinovo ulje",
+    "warning": "Stavke sa * označavaju recepte koji su detaljno objašnjeni u posebnoj PDF knjizi (100 recepata velikog gurmana).",
+    "coreRules": [
+      "Namirnice uvoditi 3 dana uz postepeno povećanje količine.",
+      "Do godinu dana ne dodavati so, šećer, med ni kravlje mlijeko.",
+      "Za alergije i zdravstvene dileme obavezno konsultovati pedijatra."
+    ]
+  },
+  "stages": [
+    {
+      "name": "6+ mjeseci",
+      "days": "1-19",
+      "recommendedMealsPerDay": 1,
+      "examples": [
+        "1: Tikvica",
+        "2: Batat + tikvica",
+        "3: Jabuka + batat + tikvica",
+        "10: Proso + blitva + maslinovo ulje",
+        "15: Piletina + c.luk + batat + blitva + edmu",
+        "19: Cejlonski cimet + banana + jabuka + zobene pahuljice"
+      ]
+    },
+    {
+      "name": "8+ do 9+ mjeseci",
+      "days": "20-37",
+      "recommendedMealsPerDay": 2,
+      "examples": [
+        "20: Proso + banana | Brokula + tikvica + krompir + edmu",
+        "24: Proso + kruška + banana | Mrkva + krompir + c.luk + grašak + edmu",
+        "27: 1/4 žumanceta + palenta + blitva",
+        "30: Zobene + jabuka + mango | Karfiol + batat + piletina + mrkva + edmu",
+        "35: Borovnice + speltin griz + banana | Umak (c.luk + tikva + peršun) + tjestenina*",
+        "37: Sir + jaje + jogurt | Sir + tikva + mrkva + piletina"
+      ]
+    },
+    {
+      "name": "10+ do 11+ mjeseci",
+      "days": "38-56",
+      "recommendedMealsPerDay": 3,
+      "examples": [
+        "38: Oslić + brokula + batat + tikva + edmu | Pohovane tikvice*",
+        "41: Kajgana na suvoj tavi sa malo edmu + jogurt | Popečci od cvekle*",
+        "45: Pasulj + junetina + mrkva + b.luk + krompir + edmu | Speltini uštipci*",
+        "49: Prokulice + krompir + junetina + mrkva + edmu | Slana pita*",
+        "53: Paprika + teletina + paradajz + krompir + edmu | Batat u palenti*",
+        "56: Piletina + paradajz + paprika + komorač + batat + edmu | Čokolino*"
+      ]
+    }
+  ],
+  "fullTextStatus": {
+    "extracted": true,
+    "comment": "PDF je uspješno tekstualno očitan, ali većina stavki predstavlja kombinacije namirnica po danima, ne klasične recepte sa koracima pripreme.",
+    "nextStepSuggestion": "Za direktan import u aplikaciju: mapirati svaku stavku u recipe objekat (title + minAgeMonths + summary) i posebno označiti one sa * kao 'externalRecipeBook'."
+  }
+}

@@ -1,48 +1,117 @@
-<h1>Hranjenje</h1>
+<div class="feeding-page">
+  <header class="page-head">
+    <h1>Hranjenje</h1>
+    <p class="subtitle">Prati dojenje, flašicu i čvrstu hranu na jednom mjestu.</p>
+  </header>
 
-@if (milk(); as m) {
-  <section class="panel">
-    <h2>Mlijeko (do ~4,5 mj)</h2>
-    <p>{{ m.message }}</p>
-    @if (m.applies && m.suggestedTimesLocal.length) {
-      <p>Predložena vremena: {{ m.suggestedTimesLocal.join(', ') }}</p>
+  <div class="grid">
+    @if (milk(); as m) {
+      <section class="panel panel--hint">
+        <h2>Mlijeko (do ~4,5 mj)</h2>
+        <p class="muted">{{ m.message }}</p>
+        @if (m.applies && m.suggestedTimesLocal.length) {
+          <div class="chip-wrap">
+            @for (t of m.suggestedTimesLocal; track t) {
+              <span class="chip">{{ t }}</span>
+            }
+          </div>
+        }
+      </section>
     }
-  </section>
-}
 
-@if (solid(); as s) {
+    @if (solid(); as s) {
+      <section class="panel panel--hint">
+        <h2>Čvrsta hrana</h2>
+        <p class="muted">{{ s.phaseHint }}</p>
+        <p class="muted">Cilj obroka/dan: <strong>{{ s.solidMealsPerDayGoal }}</strong></p>
+        <ul class="food-list">
+          @for (f of s.suggestions; track f.name) {
+            <li><strong>{{ f.name }}</strong> (od {{ f.introFromMonth }} mj) — {{ f.notes }}</li>
+          }
+        </ul>
+      </section>
+    }
+  </div>
+
   <section class="panel">
-    <h2>Čvrsta hrana</h2>
-    <p>{{ s.phaseHint }}</p>
-    <p>Cilj obroka/dan: {{ s.solidMealsPerDayGoal }}</p>
-    <ul>
-      @for (f of s.suggestions; track f.name) {
-        <li><strong>{{ f.name }}</strong> (od {{ f.introFromMonth }} mj) — {{ f.notes }}</li>
+    <h2>Unos hranjenja</h2>
+    <form [formGroup]="logForm" (ngSubmit)="addLog()" class="feeding-form">
+      <label>
+        Početak
+        <input type="datetime-local" formControlName="start" />
+      </label>
+
+      <label>
+        Kraj (trajanje)
+        <input type="datetime-local" formControlName="end" />
+      </label>
+
+      <label>
+        Tip
+        <select formControlName="type" class="type-select">
+          <option [value]="0">Dojenje</option>
+          <option [value]="1">Flašica</option>
+          <option [value]="2">Čvrsta hrana</option>
+        </select>
+      </label>
+
+      @if (feedType() === 0) {
+        <label>
+          Dojka
+          <select formControlName="breastSide">
+            <option value="">Odaberi</option>
+            <option [value]="0">Lijeva</option>
+            <option [value]="1">Desna</option>
+          </select>
+        </label>
+      }
+
+      @if (feedType() === 1) {
+        <label>
+          Količina (ml)
+          <input type="number" min="0" formControlName="amountMl" />
+        </label>
+      }
+
+      @if (feedType() === 2) {
+        <label>
+          Što je jela beba
+          <input formControlName="foodDescription" placeholder="npr. pire od mrkve i krompira" />
+        </label>
+      }
+
+      <label>
+        Napomena
+        <input formControlName="notes" />
+      </label>
+      <button type="submit" [disabled]="logForm.invalid">Spremi unos</button>
+    </form>
+
+    <ul class="logs">
+      @for (l of logs(); track l.id) {
+        <li class="log-item">
+          <div class="main">
+            <strong>{{ l.startUtc | date: 'short' }}</strong>
+            @if (l.endUtc) {
+              <span>→ {{ l.endUtc | date: 'shortTime' }}</span>
+            }
+          </div>
+          <div class="meta">
+            <span class="type-pill">{{ l.type }}</span>
+            @if (l.breastSide) {
+              <span>· dojka: {{ l.breastSide === 'Left' ? 'lijeva' : 'desna' }}</span>
+            }
+            @if (l.amountMl) {
+              <span>· {{ l.amountMl }} ml</span>
+            }
+            @if (l.foodDescription) {
+              <span>· {{ l.foodDescription }}</span>
+            }
+          </div>
+        </li>
+      } @empty {
+        <li class="muted">Nema unosa u zadnjih 7 dana.</li>
       }
     </ul>
   </section>
-}
-
-<section class="panel">
-  <h2>Unos hranjenja</h2>
-  <form [formGroup]="logForm" (ngSubmit)="addLog()">
-    <label>Vrijeme <input type="datetime-local" formControlName="start" /></label>
-    <label>
-      Tip
-      <select formControlName="type">
-        <option [value]="0">Dojenje</option>
-        <option [value]="1">Flaša</option>
-        <option [value]="2">Čvrsto</option>
-      </select>
-    </label>
-    <label>ml (opc.) <input type="number" formControlName="amountMl" /></label>
-    <label>Hrana (opc.) <input formControlName="foodDescription" /></label>
-    <label>Napomena <input formControlName="notes" /></label>
-    <button type="submit" [disabled]="logForm.invalid">Spremi</button>
-  </form>
-  <ul>
-    @for (l of logs(); track l.id) {
-      <li>{{ l.startUtc | date: 'short' }} — {{ l.type }} @if (l.amountMl) { ({{ l.amountMl }} ml) }</li>
-    }
-  </ul>
-</section>
+</div>

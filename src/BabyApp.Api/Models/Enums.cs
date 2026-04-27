@@ -20,6 +20,12 @@ public enum FeedingLogType
     Solid = 2,
 }
 
+public enum BreastSide
+{
+    Left = 0,
+    Right = 1,
+}
+
 public enum ReactionKind
 {
     Allergy = 0,

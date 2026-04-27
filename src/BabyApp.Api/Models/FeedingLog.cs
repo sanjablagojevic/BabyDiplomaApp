@@ -14,6 +14,8 @@ public class FeedingLog
 
     public FeedingLogType Type { get; set; }
 
+    public BreastSide? BreastSide { get; set; }
+
     public int? AmountMl { get; set; }
 
     public string? FoodDescription { get; set; }

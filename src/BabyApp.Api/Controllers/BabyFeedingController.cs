@@ -52,6 +52,7 @@ public class BabyFeedingController : ControllerBase
             StartUtc = body.StartUtc,
             EndUtc = body.EndUtc,
             Type = body.Type,
+            BreastSide = body.BreastSide,
             AmountMl = body.AmountMl,
             FoodDescription = body.FoodDescription,
             Notes = body.Notes,
@@ -130,14 +131,31 @@ public class BabyFeedingController : ControllerBase
         DateTimeOffset StartUtc,
         DateTimeOffset? EndUtc,
         FeedingLogType Type,
+        BreastSide? BreastSide,
         int? AmountMl,
         string? FoodDescription,
         string? Notes);
 
-    public record FeedingDto(int Id, DateTimeOffset StartUtc, DateTimeOffset? EndUtc, string Type, int? AmountMl, string? FoodDescription, string? Notes)
+    public record FeedingDto(
+        int Id,
+        DateTimeOffset StartUtc,
+        DateTimeOffset? EndUtc,
+        string Type,
+        string? BreastSide,
+        int? AmountMl,
+        string? FoodDescription,
+        string? Notes)
     {
         public static FeedingDto FromEntity(FeedingLog f) =>
-            new(f.Id, f.StartUtc, f.EndUtc, f.Type.ToString(), f.AmountMl, f.FoodDescription, f.Notes);
+            new(
+                f.Id,
+                f.StartUtc,
+                f.EndUtc,
+                f.Type.ToString(),
+                f.BreastSide?.ToString(),
+                f.AmountMl,
+                f.FoodDescription,
+                f.Notes);
     }
 
     public record MilkScheduleDto(bool Applies, string? Routine, IReadOnlyList<TimeOnly> SuggestedTimesLocal, string Message);

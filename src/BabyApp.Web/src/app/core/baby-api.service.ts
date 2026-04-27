@@ -120,6 +120,7 @@ export class BabyApiService {
       startUtc: string;
       endUtc?: string | null;
       type: number;
+      breastSide?: number | null;
       amountMl?: number | null;
       foodDescription?: string | null;
       notes?: string | null;
@@ -273,6 +274,7 @@ export type FeedingDto = {
   startUtc: string;
   endUtc: string | null;
   type: string;
+  breastSide: string | null;
   amountMl: number | null;
   foodDescription: string | null;
   notes: string | null;
