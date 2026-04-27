@@ -2,20 +2,75 @@
   <p class="error">{{ err() }}</p>
 }
 @if (data(); as d) {
-  <section class="card">
-    <h1>{{ d.baby.name }}</h1>
-    <p class="meta">
-      Dob: ~{{ d.ageMonthsApprox | number: '1.1-1' }} mj (cjelina {{ d.ageWholeMonths }} mj) · skupina: {{ d.ageBand }}
-    </p>
-    <p>{{ d.isYoungInfantUnderFourAndHalfMonths ? 'Fokus na mlijeko / 3h rutinu.' : 'Možeš pratiti čvrstu hranu i dremke.' }}</p>
-  </section>
-  <section class="card">
-    <h2>Dostupni moduli (po uzrastu)</h2>
-    <ul>
-      @for (m of d.availableModules; track m) {
-        <li>{{ m }}</li>
+  <div class="dashboard">
+    <section class="hero">
+      <h1>{{ d.baby.name }} · Današnji pregled</h1>
+      <p class="meta">
+        Dob: ~{{ d.ageMonthsApprox | number: '1.1-1' }} mj ({{ d.ageWholeMonths }} mj) · skupina: {{ d.ageBand }}
+      </p>
+      <p class="lead">
+        {{ d.isYoungInfantUnderFourAndHalfMonths ? 'Fokus na mlijeko i kraće budne prozore.' : 'Fokus na ritam obroka, sna i aktivnosti.' }}
+      </p>
+      @if (nextNap()) {
+        <p class="hint">Predložena sljedeća dremka: <strong>oko {{ nextNap() }}</strong></p>
       }
-    </ul>
-    <p class="hint">Koristi izbornik iznad za unos i pregled.</p>
-  </section>
+    </section>
+
+    <section class="stats">
+      <article class="stat">
+        <span>San danas</span>
+        <strong>{{ formatMinutes(todaySleepMinutes()) }}</strong>
+      </article>
+      <article class="stat">
+        <span>Obroci danas</span>
+        <strong>{{ todayFeedingCount() }}</strong>
+      </article>
+      <article class="stat">
+        <span>Pelene danas</span>
+        <strong>{{ todayDiapersCount() }}</strong>
+      </article>
+      <article class="stat">
+        <span>Sljedeći podsjetnik</span>
+        <strong>{{ nextReminder()?.title ?? '—' }}</strong>
+        @if (nextReminder(); as nr) {
+          <small>{{ nr.localTime.slice(0, 5) }}</small>
+        }
+      </article>
+    </section>
+
+    <section class="card">
+      <h2>Brze akcije</h2>
+      <div class="quick-actions">
+        <a [routerLink]="['/baby', d.baby.id, 'sleep']">Dodaj san</a>
+        <a [routerLink]="['/baby', d.baby.id, 'feeding']">Dodaj hranjenje</a>
+        <a [routerLink]="['/baby', d.baby.id, 'diapers']">Dodaj pelenu</a>
+        <a [routerLink]="['/baby', d.baby.id, 'reactions']">Dodaj reakciju</a>
+      </div>
+    </section>
+
+    <section class="card">
+      <h2>Zadnje aktivnosti</h2>
+      <ul class="timeline">
+        @for (t of timeline(); track t.at.toISOString() + t.text) {
+          <li>
+            <span class="time">{{ t.at | date: 'shortTime' }}</span>
+            <span>{{ t.text }}</span>
+          </li>
+        } @empty {
+          <li class="empty">Nema aktivnosti još danas.</li>
+        }
+      </ul>
+    </section>
+
+    <section class="card">
+      <h2>Uvid</h2>
+      <ul class="insights">
+        @for (line of insights(); track line) {
+          <li>{{ line }}</li>
+        } @empty {
+          <li>Trenutno nema uvida.</li>
+        }
+      </ul>
+    </section>
+  </div>
 }
