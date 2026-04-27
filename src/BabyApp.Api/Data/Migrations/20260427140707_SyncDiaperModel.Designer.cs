@@ -4,6 +4,7 @@ using BabyApp.Api.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BabyApp.Api.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260427140707_SyncDiaperModel")]
+    partial class SyncDiaperModel
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -120,35 +123,6 @@ namespace BabyApp.Api.Data.Migrations
                     b.HasIndex("ParentId");
 
                     b.ToTable("Babies");
-                });
-
-            modelBuilder.Entity("BabyApp.Api.Models.BabyGalleryPhoto", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<int>("BabyId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("MonthSlot")
-                        .HasColumnType("int");
-
-                    b.Property<string>("RelativePath")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTimeOffset>("UploadedUtc")
-                        .HasColumnType("datetimeoffset");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("BabyId", "MonthSlot")
-                        .IsUnique();
-
-                    b.ToTable("BabyGalleryPhotos");
                 });
 
             modelBuilder.Entity("BabyApp.Api.Models.DailyWakeLog", b =>
@@ -646,17 +620,6 @@ namespace BabyApp.Api.Data.Migrations
                     b.Navigation("Parent");
                 });
 
-            modelBuilder.Entity("BabyApp.Api.Models.BabyGalleryPhoto", b =>
-                {
-                    b.HasOne("BabyApp.Api.Models.Baby", "Baby")
-                        .WithMany("GalleryPhotos")
-                        .HasForeignKey("BabyId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Baby");
-                });
-
             modelBuilder.Entity("BabyApp.Api.Models.DailyWakeLog", b =>
                 {
                     b.HasOne("BabyApp.Api.Models.Baby", "Baby")
@@ -803,8 +766,6 @@ namespace BabyApp.Api.Data.Migrations
                     b.Navigation("DiaperLogs");
 
                     b.Navigation("FeedingLogs");
-
-                    b.Navigation("GalleryPhotos");
 
                     b.Navigation("GrowthMeasurements");
 

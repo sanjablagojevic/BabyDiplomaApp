@@ -14,6 +14,8 @@ import { ReactionsPage } from './pages/reactions/reactions-page';
 import { RegisterPage } from './pages/register/register';
 import { RemindersPage } from './pages/reminders/reminders-page';
 import { SleepPage } from './pages/sleep/sleep-page';
+import { DiapersPage } from './pages/diapers/diapers-page';
+import { GalleryPage } from './pages/gallery/gallery-page';
 
 export const routes: Routes = [
   { path: 'login', component: LoginPage },
@@ -31,6 +33,8 @@ export const routes: Routes = [
           { path: 'dashboard', component: DashboardPage },
           { path: 'sleep', component: SleepPage },
           { path: 'feeding', component: FeedingPage },
+          { path: 'diapers', component: DiapersPage },
+          { path: 'gallery', component: GalleryPage },
           { path: 'recipes', component: RecipesPage },
           { path: 'reactions', component: ReactionsPage },
           { path: 'growth', component: GrowthPage },

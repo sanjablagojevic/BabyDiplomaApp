@@ -9,6 +9,8 @@
         >Pregled</a>
       <a [routerLink]="['/baby', babyId, 'sleep']" routerLinkActive="is-active">San</a>
       <a [routerLink]="['/baby', babyId, 'feeding']" routerLinkActive="is-active">Hrana</a>
+      <a [routerLink]="['/baby', babyId, 'diapers']" routerLinkActive="is-active">Pelene</a>
+      <a [routerLink]="['/baby', babyId, 'gallery']" routerLinkActive="is-active">Galerija</a>
       <a [routerLink]="['/baby', babyId, 'recipes']" routerLinkActive="is-active">Recepti</a>
       <a [routerLink]="['/baby', babyId, 'reactions']" routerLinkActive="is-active">Reakcije</a>
       <a [routerLink]="['/baby', babyId, 'growth']" routerLinkActive="is-active">Rast</a>
@@ -19,6 +21,24 @@
     <a routerLink="/education" class="edu">Savjeti</a>
   </header>
   <main class="shell-main">
+    @if (dueReminders.length) {
+      <section class="reminder-alerts" aria-live="polite">
+        @for (r of dueReminders; track r.id) {
+          <article class="reminder-alert">
+            <div class="reminder-alert-main">
+              <strong>Podsjetnik: {{ r.title }}</strong>
+              <p>
+                Vrijeme je za <span class="kind">{{ r.kind }}</span> ({{ r.localTime.slice(0, 5) }})
+                @if (r.vaccineName) {
+                  · {{ r.vaccineName }}
+                }
+              </p>
+            </div>
+            <button type="button" (click)="dismissReminder(r.id)">U redu</button>
+          </article>
+        }
+      </section>
+    }
     <router-outlet />
   </main>
 </div>

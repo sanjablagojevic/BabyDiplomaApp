@@ -18,4 +18,15 @@ export class InsightsPage implements OnInit {
     if (!id) return;
     this.api.insights(id).subscribe({ next: (x) => this.lines.set(x) });
   }
+
+  toneFor(line: string): 'warn' | 'ok' | 'info' {
+    const t = line.toLowerCase();
+    if (t.includes('upozoren') || t.includes('niž') || t.includes('reakcij') || t.includes('posavjetuj')) {
+      return 'warn';
+    }
+    if (t.includes('nema automatskih upozorenja')) {
+      return 'ok';
+    }
+    return 'info';
+  }
 }

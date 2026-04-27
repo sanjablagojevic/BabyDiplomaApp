@@ -1,0 +1,57 @@
+<div class="diapers-page">
+  <header class="page-head">
+    <h1>Pelene</h1>
+    <p>Brzi unos i pregled aktivnosti pelena u zadnjih 7 dana.</p>
+  </header>
+
+  <section class="panel panel--quick">
+    <h2>Brzi unos</h2>
+    <div class="quick-buttons">
+      <button type="button" class="wet" (click)="add(0)">💧 Wet</button>
+      <button type="button" class="dirty" (click)="add(1)">💩 Dirty</button>
+      <button type="button" class="mixed" (click)="add(2)">💧💩 Mixed</button>
+    </div>
+
+    <form [formGroup]="form" class="meta-form">
+      <label>
+        <span>Vrijeme (opcionalno)</span>
+        <input type="datetime-local" formControlName="occurred" />
+      </label>
+      <label>
+        <span>Napomena (opcionalno)</span>
+        <input formControlName="notes" placeholder="npr. jači miris, boja..." />
+      </label>
+    </form>
+  </section>
+
+  <section class="panel">
+    <h2>Sažetak (7 dana)</h2>
+    <div class="stats">
+      <article><span>Wet</span><strong>{{ stats().wet }}</strong></article>
+      <article><span>Dirty</span><strong>{{ stats().dirty }}</strong></article>
+      <article><span>Mixed</span><strong>{{ stats().mixed }}</strong></article>
+    </div>
+  </section>
+
+  <section class="panel">
+    <h2>Istorija</h2>
+    <ul class="history">
+      @for (r of rows(); track r.id) {
+        <li>
+          <div class="main">
+            <strong>{{ r.occurredUtc | date: 'short' }}</strong>
+            <span class="type" [class.wet]="r.type === 'Wet'" [class.dirty]="r.type === 'Dirty'" [class.mixed]="r.type === 'Mixed'">
+              {{ r.type }}
+            </span>
+          </div>
+          @if (r.notes) {
+            <p>{{ r.notes }}</p>
+          }
+          <button type="button" class="del" (click)="remove(r)">Obriši</button>
+        </li>
+      } @empty {
+        <li class="empty">Nema unosa. Dodaj prvi unos iznad.</li>
+      }
+    </ul>
+  </section>
+</div>

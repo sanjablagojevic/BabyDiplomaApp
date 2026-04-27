@@ -67,7 +67,7 @@ public class BabiesController : ControllerBase
 
         var modules = new List<string>
         {
-            "sleep_naps", "sleep_audio", "feeding", "reactions", "growth", "milestones", "reminders", "education", "insights",
+            "sleep_naps", "sleep_audio", "feeding", "diapers", "gallery", "reactions", "growth", "milestones", "reminders", "education", "insights",
         };
         if (young)
             modules.Add("feeding_interval_3h");

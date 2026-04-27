@@ -1,7 +1,20 @@
-<h1>Automatski uvidi</h1>
-<p class="muted">Heuristike na temelju zadnjih unosa — nisu medicinska dijagnoza.</p>
-<ul>
-  @for (l of lines(); track l) {
-    <li>{{ l }}</li>
-  }
-</ul>
+<div class="insights-page">
+  <header class="page-head">
+    <h1>Automatski uvidi</h1>
+    <p class="muted">Heuristike na temelju zadnjih unosa — nisu medicinska dijagnoza.</p>
+  </header>
+
+  <section class="panel">
+    <h2>Sažetak zadnjih unosa</h2>
+    <ul class="insight-list">
+      @for (l of lines(); track l) {
+        <li class="insight-item" [class.warn]="toneFor(l) === 'warn'" [class.ok]="toneFor(l) === 'ok'">
+          <span class="dot" aria-hidden="true"></span>
+          <p>{{ l }}</p>
+        </li>
+      } @empty {
+        <li class="empty">Trenutno nema uvida. Dodaj više zapisa sna, hrane i reakcija.</li>
+      }
+    </ul>
+  </section>
+</div>

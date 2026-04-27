@@ -27,4 +27,6 @@ public class Baby
     public ICollection<GrowthMeasurement> GrowthMeasurements { get; set; } = new List<GrowthMeasurement>();
     public ICollection<MilestoneAchievement> MilestoneAchievements { get; set; } = new List<MilestoneAchievement>();
     public ICollection<Reminder> Reminders { get; set; } = new List<Reminder>();
+    public ICollection<DiaperLog> DiaperLogs { get; set; } = new List<DiaperLog>();
+    public ICollection<BabyGalleryPhoto> GalleryPhotos { get; set; } = new List<BabyGalleryPhoto>();
 }

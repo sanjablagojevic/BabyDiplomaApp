@@ -26,6 +26,13 @@ public enum BreastSide
     Right = 1,
 }
 
+public enum DiaperType
+{
+    Wet = 0,
+    Dirty = 1,
+    Mixed = 2,
+}
+
 public enum ReactionKind
 {
     Allergy = 0,

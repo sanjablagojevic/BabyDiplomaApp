@@ -245,6 +245,37 @@ export class BabyApiService {
     return this.http.delete<void>(`${this.root}/${babyId}/reminders/${id}`);
   }
 
+  diaperLogs(babyId: number, fromIso?: string): Observable<DiaperLogDto[]> {
+    let p = new HttpParams();
+    if (fromIso) p = p.set('from', fromIso);
+    return this.http.get<DiaperLogDto[]>(`${this.root}/${babyId}/diapers/logs`, { params: p });
+  }
+
+  addDiaperLog(
+    babyId: number,
+    body: { occurredUtc: string; type: number; notes?: string | null },
+  ): Observable<DiaperLogDto> {
+    return this.http.post<DiaperLogDto>(`${this.root}/${babyId}/diapers/logs`, body);
+  }
+
+  deleteDiaperLog(babyId: number, id: number): Observable<void> {
+    return this.http.delete<void>(`${this.root}/${babyId}/diapers/logs/${id}`);
+  }
+
+  gallerySlots(babyId: number): Observable<GallerySlotDto[]> {
+    return this.http.get<GallerySlotDto[]>(`${this.root}/${babyId}/gallery/slots`);
+  }
+
+  uploadGallerySlot(babyId: number, monthSlot: number, file: File): Observable<GallerySlotDto> {
+    const fd = new FormData();
+    fd.append('file', file);
+    return this.http.post<GallerySlotDto>(`${this.root}/${babyId}/gallery/slots/${monthSlot}`, fd);
+  }
+
+  deleteGallerySlot(babyId: number, monthSlot: number): Observable<void> {
+    return this.http.delete<void>(`${this.root}/${babyId}/gallery/slots/${monthSlot}`);
+  }
+
   insights(babyId: number): Observable<string[]> {
     return this.http.get<string[]>(`${this.root}/${babyId}/insights`);
   }
@@ -348,4 +379,18 @@ export type ReminderDto = {
   isEnabled: boolean;
   vaccineName: string | null;
   vaccineDueDate: string | null;
+};
+
+export type DiaperLogDto = {
+  id: number;
+  occurredUtc: string;
+  type: string;
+  notes: string | null;
+};
+
+export type GallerySlotDto = {
+  id: number;
+  monthSlot: number;
+  imageUrl: string;
+  uploadedUtc: string;
 };

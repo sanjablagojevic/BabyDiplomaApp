@@ -1,0 +1,97 @@
+.gallery-page {
+  max-width: 56rem;
+  margin: 0 auto;
+}
+
+.page-head {
+  margin-bottom: 1rem;
+}
+
+.page-head h1 {
+  margin: 0;
+}
+
+.page-head p {
+  margin: 0.35rem 0 0;
+  color: var(--color-text-muted);
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(9.5rem, 1fr));
+  gap: 0.65rem;
+}
+
+.tile {
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  background: var(--color-surface);
+  overflow: hidden;
+}
+
+.photo {
+  aspect-ratio: 1 / 1;
+  position: relative;
+  background: #3f3f46;
+  display: grid;
+  place-items: center;
+}
+
+.photo img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.add {
+  width: 100%;
+  height: 100%;
+  cursor: pointer;
+  display: grid;
+  place-items: center;
+}
+
+.add input {
+  display: none;
+}
+
+.add span {
+  width: 2.1rem;
+  height: 2.1rem;
+  border-radius: 999px;
+  border: 1px solid #86efac;
+  color: #86efac;
+  display: grid;
+  place-items: center;
+  font-size: 1.35rem;
+  font-weight: 500;
+}
+
+.delete {
+  position: absolute;
+  top: 0.25rem;
+  right: 0.25rem;
+  width: 1.5rem;
+  height: 1.5rem;
+  border: none;
+  border-radius: 999px;
+  background: rgba(0, 0, 0, 0.58);
+  color: #fff;
+  font-size: 1rem;
+  cursor: pointer;
+}
+
+.caption {
+  padding: 0.45rem 0.55rem 0.55rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+}
+
+.caption strong {
+  font-size: 0.95rem;
+}
+
+.caption small {
+  color: var(--color-text-muted);
+}

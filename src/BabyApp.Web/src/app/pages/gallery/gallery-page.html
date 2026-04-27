@@ -1,0 +1,35 @@
+<div class="gallery-page">
+  <header class="page-head">
+    <h1>Galerija</h1>
+    <p>Dodaj po jednu uspomenu za svaki mjesec bebe.</p>
+  </header>
+
+  <section class="grid">
+    @for (t of tiles(); track t.monthSlot) {
+      <article class="tile">
+        <div class="photo">
+          @if (t.imageUrl) {
+            <img [src]="t.imageUrl" [alt]="t.label" />
+            <button type="button" class="delete" (click)="clearSlot(t.monthSlot)">×</button>
+          } @else {
+            <label class="add">
+              <input
+                type="file"
+                accept="image/*"
+                (change)="onPickFile(t.monthSlot, $event)"
+                [disabled]="uploadingSlot() === t.monthSlot"
+              />
+              <span>+</span>
+            </label>
+          }
+        </div>
+        <div class="caption">
+          <strong>{{ t.label }}</strong>
+          @if (t.uploadedUtc) {
+            <small>{{ t.uploadedUtc | date: 'shortDate' }}</small>
+          }
+        </div>
+      </article>
+    }
+  </section>
+</div>

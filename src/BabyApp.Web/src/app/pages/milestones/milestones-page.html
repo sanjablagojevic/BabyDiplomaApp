@@ -59,4 +59,18 @@
       <button type="submit" [disabled]="form.invalid">Spremi</button>
     </form>
   </section>
+
+  <section class="panel">
+    <h2>Istorija dostignuća</h2>
+    <ul class="history">
+      @for (h of history(); track h.title) {
+        <li>
+          <strong>{{ h.title }}</strong>
+          <span>{{ h.achievedOn }}</span>
+        </li>
+      } @empty {
+        <li class="empty">Još nema upisanih dostignuća.</li>
+      }
+    </ul>
+  </section>
 </div>

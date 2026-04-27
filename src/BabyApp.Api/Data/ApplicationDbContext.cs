@@ -22,6 +22,8 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
     public DbSet<GrowthMeasurement> GrowthMeasurements => Set<GrowthMeasurement>();
     public DbSet<MilestoneAchievement> MilestoneAchievements => Set<MilestoneAchievement>();
     public DbSet<Reminder> Reminders => Set<Reminder>();
+    public DbSet<DiaperLog> DiaperLogs => Set<DiaperLog>();
+    public DbSet<BabyGalleryPhoto> BabyGalleryPhotos => Set<BabyGalleryPhoto>();
     public DbSet<EducationalArticle> EducationalArticles => Set<EducationalArticle>();
 
     protected override void OnModelCreating(ModelBuilder builder)
@@ -90,6 +92,23 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
         {
             entity.HasOne(x => x.Baby)
                 .WithMany(b => b.Reminders)
+                .HasForeignKey(x => x.BabyId)
+                .OnDelete(DeleteBehavior.Cascade);
+        });
+
+        builder.Entity<DiaperLog>(entity =>
+        {
+            entity.HasOne(x => x.Baby)
+                .WithMany(b => b.DiaperLogs)
+                .HasForeignKey(x => x.BabyId)
+                .OnDelete(DeleteBehavior.Cascade);
+        });
+
+        builder.Entity<BabyGalleryPhoto>(entity =>
+        {
+            entity.HasIndex(x => new { x.BabyId, x.MonthSlot }).IsUnique();
+            entity.HasOne(x => x.Baby)
+                .WithMany(b => b.GalleryPhotos)
                 .HasForeignKey(x => x.BabyId)
                 .OnDelete(DeleteBehavior.Cascade);
         });

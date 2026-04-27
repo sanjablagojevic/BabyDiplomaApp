@@ -1,4 +1,4 @@
-import { Component, inject, OnInit, signal } from '@angular/core';
+import { Component, computed, inject, OnInit, signal } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { BabyApiService, MilestoneProgressDto } from '../../core/baby-api.service';
 import { BabyContextService } from '../../core/baby-context.service';
@@ -15,6 +15,14 @@ export class MilestonesPage implements OnInit {
   private readonly fb = inject(FormBuilder);
 
   readonly progress = signal<MilestoneProgressDto | null>(null);
+  readonly history = computed(() => {
+    const p = this.progress();
+    if (!p) return [];
+    return p.items
+      .filter((i) => i.achieved && !!i.achievedOn)
+      .map((i) => ({ title: i.title, achievedOn: i.achievedOn! }))
+      .sort((a, b) => b.achievedOn.localeCompare(a.achievedOn));
+  });
 
   form = this.fb.nonNullable.group({
     milestone: [0, Validators.required],
@@ -42,6 +50,11 @@ export class MilestonesPage implements OnInit {
         achievedOn: v.achievedOn,
         notes: v.notes || null,
       })
-      .subscribe({ next: () => this.reload() });
+      .subscribe({
+        next: () => {
+          this.reload();
+          this.form.patchValue({ notes: '' });
+        },
+      });
   }
 }

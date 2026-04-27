@@ -1,37 +1,69 @@
-<h1>Podsjetnici</h1>
-<p class="muted">Lista u aplikaciji (push notifikacije zahtijevaju dodatnu infrastrukturu).</p>
+<div class="reminders-page">
+  <header class="page-head">
+    <h1>Podsjetnici</h1>
+    <p class="muted">Lista podsjetnika u aplikaciji (push notifikacije traže dodatnu infrastrukturu).</p>
+  </header>
 
-<form [formGroup]="form" (ngSubmit)="add()">
-  <label>
-    Vrsta
-    <select formControlName="kind">
-      <option [value]="0">Večernji san</option>
-      <option [value]="1">Obrok</option>
-      <option [value]="2">Unos podataka (rast)</option>
-      <option [value]="3">Cjepivo</option>
-      <option [value]="4">Ostalo</option>
-    </select>
-  </label>
-  <label>Naslov <input formControlName="title" /></label>
-  <label>Lokalno vrijeme <input type="time" formControlName="localTime" /></label>
-  @if (+($any(form.get('kind'))?.value) === 3) {
-    <label>Cjepivo <input formControlName="vaccineName" /></label>
-    <label>Rok <input type="date" formControlName="vaccineDue" /></label>
-  }
-  <button type="submit" [disabled]="form.invalid">Dodaj</button>
-</form>
-
-<ul>
-  @for (r of rows(); track r.id) {
-    <li>
-      <strong>{{ r.title }}</strong> ({{ r.kind }}) u {{ r.localTime }}
-      @if (r.vaccineName) {
-        — {{ r.vaccineName }} @if (r.vaccineDueDate) {
-          do {{ r.vaccineDueDate }}
-        }
+  <section class="panel">
+    <h2>Novi podsjetnik</h2>
+    <form [formGroup]="form" (ngSubmit)="add()">
+      <label>
+        <span>Vrsta</span>
+        <select formControlName="kind">
+          <option [value]="0">Večernji san</option>
+          <option [value]="1">Obrok</option>
+          <option [value]="2">Unos podataka (rast)</option>
+          <option [value]="3">Cjepivo</option>
+          <option [value]="4">Ostalo</option>
+        </select>
+      </label>
+      <label><span>Naslov</span><input formControlName="title" /></label>
+      <label><span>Lokalno vrijeme</span><input type="time" formControlName="localTime" /></label>
+      @if (+($any(form.get('kind'))?.value) === 3) {
+        <label><span>Cjepivo</span><input formControlName="vaccineName" /></label>
+        <label><span>Rok</span><input type="date" formControlName="vaccineDue" /></label>
       }
-      <button type="button" (click)="toggle(r)">{{ r.isEnabled ? 'Isključi' : 'Uključi' }}</button>
-      <button type="button" class="del" (click)="remove(r)">Obriši</button>
-    </li>
-  }
-</ul>
+      <button type="submit" [disabled]="form.invalid">Dodaj podsjetnik</button>
+    </form>
+  </section>
+
+  <section class="panel">
+    <h2>Aktivni i spremljeni podsjetnici</h2>
+    <ul class="rows">
+      @for (r of rows(); track r.id) {
+        <li class="row-item">
+          <div class="main">
+            <strong>{{ r.title }}</strong>
+            <span
+              class="kind"
+              [class.kind--meal]="r.kind === 'Meal'"
+              [class.kind--sleep]="r.kind === 'EveningSleep'"
+              [class.kind--growth]="r.kind === 'GrowthEntry'"
+              [class.kind--vaccine]="r.kind === 'Vaccine'"
+              >{{ r.kind }}</span
+            >
+          </div>
+
+          <p class="meta">Vrijeme: {{ r.localTime }} · Status: {{ r.isEnabled ? 'uključen' : 'isključen' }}</p>
+          @if (r.vaccineName) {
+            <p class="meta">
+              Cjepivo: {{ r.vaccineName }}
+              @if (r.vaccineDueDate) {
+                · rok {{ r.vaccineDueDate }}
+              }
+            </p>
+          }
+
+          <div class="actions">
+            <button type="button" class="ghost" (click)="toggle(r)">
+              {{ r.isEnabled ? 'Isključi' : 'Uključi' }}
+            </button>
+            <button type="button" class="del" (click)="remove(r)">Obriši</button>
+          </div>
+        </li>
+      } @empty {
+        <li class="empty">Još nema upisanih podsjetnika.</li>
+      }
+    </ul>
+  </section>
+</div>

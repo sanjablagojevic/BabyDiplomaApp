@@ -48,7 +48,12 @@ export class RemindersPage implements OnInit {
         vaccineName: Number(v.kind) === 3 ? v.vaccineName || null : null,
         vaccineDueDate: Number(v.kind) === 3 && v.vaccineDue ? v.vaccineDue : null,
       })
-      .subscribe({ next: () => this.refresh() });
+      .subscribe({
+        next: () => {
+          this.refresh();
+          this.form.patchValue({ vaccineName: '', vaccineDue: '' });
+        },
+      });
   }
 
   toggle(r: ReminderDto): void {

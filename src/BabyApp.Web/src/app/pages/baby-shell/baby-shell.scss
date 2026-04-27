@@ -119,6 +119,51 @@
   padding: clamp(1rem, 2.5vw, 1.75rem) clamp(1rem, 3vw, 2rem) 2rem;
 }
 
+.reminder-alerts {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+  margin-bottom: 0.9rem;
+}
+
+.reminder-alert {
+  border: 1px solid #fcd34d;
+  background: linear-gradient(180deg, #fefce8 0%, #fef9c3 100%);
+  border-radius: var(--radius-md);
+  padding: 0.6rem 0.75rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 0.8rem;
+}
+
+.reminder-alert-main strong {
+  display: block;
+  font-size: 0.92rem;
+}
+
+.reminder-alert-main p {
+  margin: 0.15rem 0 0;
+  color: #713f12;
+  font-size: 0.83rem;
+}
+
+.reminder-alert .kind {
+  font-weight: 700;
+}
+
+.reminder-alert button {
+  border: 1px solid #f59e0b;
+  background: #fff;
+  color: #92400e;
+  border-radius: var(--radius-sm);
+  padding: 0.3rem 0.6rem;
+  font: inherit;
+  font-size: 0.82rem;
+  font-weight: 700;
+  cursor: pointer;
+}
+
 @media (max-width: 720px) {
   .bar {
     padding: 0.5rem 0.75rem;
