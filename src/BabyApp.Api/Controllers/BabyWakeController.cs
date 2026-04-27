@@ -64,12 +64,31 @@ public class BabyWakeController : ControllerBase
             return BadRequest(new { message = "Nema unosa jutarnjeg buđenja za taj dan. Najprije spremi vrijeme buđenja." });
 
         var today = DateOnly.FromDateTime(DateTime.UtcNow);
-        var ageMonths = BabyAge.AgeInMonths(baby.DateOfBirth, today);
-        var plan = NapPlanService.ForAgeMonths(ageMonths);
+        var plan = NapPlanService.ForBirthDate(baby.DateOfBirth, today);
         var starts = NapPlanService.SuggestedNapStartTimes(wake.MorningWakeTime, plan);
         var bedtime = NapPlanService.SuggestBedtimeStart(wake.MorningWakeTime, plan);
 
         var next = starts.Select((t, i) => new NapSlotDto(i + 1, t, plan.TypicalNapLengthsMinutes[i % plan.TypicalNapLengthsMinutes.Count])).ToList();
+
+        var sessions = await _db.SleepSessions.AsNoTracking()
+            .Where(s => s.BabyId == babyId && s.StartUtc >= DateTimeOffset.UtcNow.AddDays(-14))
+            .OrderByDescending(s => s.StartUtc)
+            .Take(40)
+            .ToListAsync(ct);
+
+        DateTimeOffset? lastSleepEndUtc = null;
+        var isBabyAsleepNow = false;
+        if (sessions.Count > 0)
+        {
+            var latest = sessions[0];
+            if (latest.EndUtc is null)
+            {
+                isBabyAsleepNow = true;
+                lastSleepEndUtc = sessions.Skip(1).FirstOrDefault(s => s.EndUtc.HasValue)?.EndUtc;
+            }
+            else
+                lastSleepEndUtc = latest.EndUtc;
+        }
 
         return Ok(new NapPlanResponse(
             forDate,
@@ -77,10 +96,15 @@ public class BabyWakeController : ControllerBase
             plan.NapCount,
             plan.TypicalNapLengthsMinutes,
             plan.SuggestedWakeWindowMinutes,
+            plan.WakeWindowMinMinutes,
+            plan.WakeWindowMaxMinutes,
+            plan.WakeWindowBandLabel,
             plan.BedtimeWindowHint,
             bedtime,
             plan.Notes,
-            next));
+            next,
+            lastSleepEndUtc,
+            isBabyAsleepNow));
     }
 
     public record WakeLogRequest(DateOnly ForDate, TimeOnly MorningWakeTime);
@@ -95,8 +119,13 @@ public class BabyWakeController : ControllerBase
         int NapCount,
         IReadOnlyList<int> TypicalNapLengthsMinutes,
         int SuggestedWakeWindowMinutes,
+        int WakeWindowMinMinutes,
+        int WakeWindowMaxMinutes,
+        string WakeWindowBandLabel,
         string BedtimeWindowHint,
         TimeOnly SuggestedBedtimeStartLocal,
         string Notes,
-        IReadOnlyList<NapSlotDto> Naps);
+        IReadOnlyList<NapSlotDto> Naps,
+        DateTimeOffset? LastSleepEndUtc,
+        bool IsBabyAsleepNow);
 }

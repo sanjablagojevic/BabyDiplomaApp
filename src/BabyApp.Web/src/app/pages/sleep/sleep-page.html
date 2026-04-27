@@ -1,62 +1,200 @@
-<h1>San i dremke</h1>
+<div class="sleep-page">
+  <header class="page-head">
+    <h1>San i dremke</h1>
+    <p class="page-lead">
+      Budni prozori po uzrastu i procjena sljedeće dremke na temelju zadnjeg buđenja (informativno).
+    </p>
+  </header>
 
-<section class="panel">
-  <h2>Jutarnje buđenje</h2>
-  <form [formGroup]="wakeForm" (ngSubmit)="saveWake()">
-    <label>Datum <input type="date" formControlName="forDate" /></label>
-    <label>Vrijeme <input type="time" formControlName="morningWakeTime" /></label>
-    <button type="submit">Spremi</button>
-    <button type="button" class="secondary" (click)="loadPlan()">Osvježi plan</button>
-  </form>
-  @if (planErr()) {
-    <p class="warn">{{ planErr() }}</p>
+  @if (plan(); as p) {
+    @if (wakeInsight(); as wi) {
+      <section class="hero" [class.hero--asleep]="wi.kind === 'asleep'">
+        @switch (wi.kind) {
+          @case ('asleep') {
+            <div class="hero-inner">
+              <span class="hero-badge">Trenutno</span>
+              <h2 class="hero-title">Beba vjerojatno spava</h2>
+              <p class="hero-text">
+                Kad završiš unos sna s vremenom kraja, ovdje će se pojaviti procjena sljedeće dremke.
+              </p>
+            </div>
+          }
+          @case ('need_wake') {
+            <div class="hero-inner">
+              <span class="hero-badge">{{ wi.band }}</span>
+              <h2 class="hero-title">Nedostaje trenutak buđenja</h2>
+              <p class="hero-text">
+                Budni prozor za ovu dob: {{ wi.min }}–{{ wi.max }} min. Unesi završetak zadnjeg sna u dnevniku ili
+                jutarnje buđenje za ovaj dan.
+              </p>
+            </div>
+          }
+          @case ('awake') {
+            <div class="hero-inner">
+              <span class="hero-badge">{{ wi.band }}</span>
+              <h2 class="hero-title">Budni prozor: {{ wi.min }}–{{ wi.max }} min</h2>
+              <p class="hero-meta">
+                Tipično ~{{ wi.typical }} min · zadnje buđenje
+                <strong>{{ wi.lastWake | date: 'short' }}</strong>
+              </p>
+
+              <div class="progress-wrap" aria-hidden="true">
+                <div class="progress-labels">
+                  <span>Početak budnosti</span>
+                  <span>Tipično (~{{ wi.typical }} min)</span>
+                  <span>Gornja granica ({{ wi.max }} min)</span>
+                </div>
+                <div class="progress-track">
+                  <div class="progress-fill progress-fill--max" [style.width.%]="wi.progressMaxPct"></div>
+                  <div class="progress-fill progress-fill--typical" [style.width.%]="wi.progressTypicalPct"></div>
+                </div>
+              </div>
+
+              <div class="hero-times">
+                <div class="time-block">
+                  <span class="time-label">Procjena sljedeće dremke</span>
+                  <span class="time-value" [class.time-value--warn]="wi.overdueSuggested">{{
+                    wi.suggestedAt | date: 'shortTime'
+                  }}</span>
+                </div>
+                <div class="time-block">
+                  <span class="time-label">Razdoblje do gornje granice</span>
+                  <span class="time-value">do {{ wi.windowEnd | date: 'shortTime' }}</span>
+                </div>
+              </div>
+
+              @if (wi.overdueSuggested) {
+                <p class="hero-hint hero-hint--accent">
+                  Prosječno vrijeme za dremku je prošlo — prati znakove umora; svaka beba je drugačija.
+                </p>
+              } @else {
+                <p class="hero-hint">
+                  Još oko <strong>{{ formatDurationMinutes(wi.untilSuggestedMinutes) }}</strong> do tipičnog trenutka za
+                  dremku · do kraja prozora
+                  <strong>{{ formatDurationMinutes(wi.untilWindowEndMinutes) }}</strong>.
+                </p>
+              }
+            </div>
+          }
+        }
+      </section>
+    }
   }
-</section>
 
-@if (plan(); as p) {
-  <section class="panel">
-    <h2>Plan dremki (heuristika)</h2>
-    <p>{{ p.notes }}</p>
-    <p>Broj dremki: {{ p.napCount }} · prozor buđenosti: {{ p.suggestedWakeWindowMinutes }} min</p>
-    <p>Večernji spavanac: {{ p.bedtimeWindowHint }} · predloženo oko {{ p.suggestedBedtimeStartLocal }}</p>
-    <ul>
-      @for (n of p.naps; track n.order) {
-        <li>Dremka {{ n.order }}: ~{{ n.suggestedStartLocal }} ({{ n.typicalDurationMinutes }} min)</li>
+  <div class="sleep-grid">
+    <section class="card card--form">
+      <h2>Jutarnje buđenje</h2>
+      <p class="card-desc">Za odabrani dan postavlja početak dana za heuristički plan.</p>
+      <form [formGroup]="wakeForm" (ngSubmit)="saveWake()" class="stack">
+        <label class="field">
+          <span class="field-label">Datum</span>
+          <input type="date" formControlName="forDate" />
+        </label>
+        <label class="field">
+          <span class="field-label">Vrijeme</span>
+          <input type="time" formControlName="morningWakeTime" />
+        </label>
+        <div class="actions">
+          <button type="submit" class="btn btn-primary">Spremi</button>
+          <button type="button" class="btn btn-ghost" (click)="loadPlan()">Osvježi plan</button>
+        </div>
+      </form>
+      @if (planErr()) {
+        <p class="inline-warn">{{ planErr() }}</p>
+      }
+    </section>
+
+    @if (plan(); as p) {
+      <section class="card">
+        <h2>Plan dremki (od jutra)</h2>
+        <p class="card-desc">{{ p.notes }}</p>
+        <ul class="stat-row">
+          <li><span class="stat-k">Broj dremki</span> <span class="stat-v">{{ p.napCount }}</span></li>
+          <li>
+            <span class="stat-k">Budni prozor (tablica)</span>
+            <span class="stat-v">{{ p.wakeWindowMinMinutes }}–{{ p.wakeWindowMaxMinutes }} min</span>
+          </li>
+          <li>
+            <span class="stat-k">Večernji san</span>
+            <span class="stat-v">{{ p.bedtimeWindowHint }} · ~{{ p.suggestedBedtimeStartLocal }}</span>
+          </li>
+        </ul>
+        <ol class="nap-list">
+          @for (n of p.naps; track n.order) {
+            <li>
+              <span class="nap-idx">{{ n.order }}</span>
+              <div class="nap-body">
+                <strong>~{{ n.suggestedStartLocal }}</strong>
+                <span class="nap-sub">trajanje oko {{ n.typicalDurationMinutes }} min</span>
+              </div>
+            </li>
+          }
+        </ol>
+      </section>
+    }
+  </div>
+
+  <section class="card card--wide">
+    <h2>Uspavanke i zvukovi</h2>
+    <ul class="audio-chips">
+      @for (a of audio(); track a.title) {
+        <li class="audio-chip">
+          <span class="audio-title">{{ a.title }}</span>
+          <span class="audio-kind">{{ a.kind }}</span>
+          @if (a.url) {
+            <a class="audio-link" [href]="a.url!" target="_blank" rel="noopener">Otvori</a>
+          }
+        </li>
       }
     </ul>
   </section>
-}
 
-<section class="panel">
-  <h2>Uspavanke / zvukovi</h2>
-  <ul>
-    @for (a of audio(); track a.title) {
-      <li>
-        <strong>{{ a.title }}</strong> ({{ a.kind }})
-        @if (a.url) {
-          — <a [href]="a.url!" target="_blank" rel="noopener">otvori</a>
-        }
-      </li>
-    }
-  </ul>
-</section>
+  <section class="card card--wide">
+    <h2>Dnevnik sna</h2>
+    <p class="card-desc">Kraj sna = trenutak buđenja — koristi se za procjenu sljedeće dremke.</p>
+    <form [formGroup]="sessionForm" (ngSubmit)="addSession()" class="session-form stack">
+      <div class="session-grid">
+        <label class="field">
+          <span class="field-label">Početak</span>
+          <input type="datetime-local" formControlName="start" />
+        </label>
+        <label class="field">
+          <span class="field-label">Kraj</span>
+          <input type="datetime-local" formControlName="end" />
+        </label>
+      </div>
+      <label class="field field--inline">
+        <input type="checkbox" formControlName="isNap" />
+        <span class="field-label">Dremka (ne noćni san)</span>
+      </label>
+      <label class="field">
+        <span class="field-label">Napomena</span>
+        <input formControlName="notes" placeholder="opcionalno" />
+      </label>
+      <button type="submit" class="btn btn-primary" [disabled]="sessionForm.invalid">Dodaj unos</button>
+    </form>
 
-<section class="panel">
-  <h2>Evidencija sna (Baby Buddy stil)</h2>
-  <form [formGroup]="sessionForm" (ngSubmit)="addSession()">
-    <label>Početak <input type="datetime-local" formControlName="start" /></label>
-    <label>Kraj <input type="datetime-local" formControlName="end" /></label>
-    <label><input type="checkbox" formControlName="isNap" /> Dremka</label>
-    <label>Napomena <input formControlName="notes" /></label>
-    <button type="submit" [disabled]="sessionForm.invalid">Dodaj</button>
-  </form>
-  <ul class="sessions">
-    @for (s of sessions(); track s.id) {
-      <li>
-        {{ s.startUtc | date: 'short' }} — {{ s.endUtc ? (s.endUtc | date: 'short') : '…' }}
-        ({{ s.isNap ? 'dremka' : 'noć' }})
-        <button type="button" class="linkish" (click)="removeSession(s)">Obriši</button>
-      </li>
-    }
-  </ul>
-</section>
+    <ul class="session-list">
+      @for (s of sessions(); track s.id) {
+        <li class="session-item">
+          <div class="session-main">
+            <span class="session-type" [class.session-type--nap]="s.isNap">{{ s.isNap ? 'Dremka' : 'Noć' }}</span>
+            <div class="session-times">
+              <span>{{ s.startUtc | date: 'short' }}</span>
+              <span class="session-sep">→</span>
+              <span>{{ s.endUtc ? (s.endUtc | date: 'short') : '…' }}</span>
+            </div>
+          </div>
+          <button type="button" class="btn-text" (click)="removeSession(s)">Obriši</button>
+        </li>
+      } @empty {
+        <li class="session-empty">Još nema unosa u zadnjih 14 dana.</li>
+      }
+    </ul>
+  </section>
+
+  <p class="fine-print">
+    Smjernice budnih prozora služe kao informativna pomoć, nisu medicinski savjet. Prilagodi prema svojoj bebi i
+    pedijatru.
+  </p>
+</div>

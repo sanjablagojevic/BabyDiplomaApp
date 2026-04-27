@@ -1,12 +1,12 @@
-import { Injectable, signal } from '@angular/core';
+﻿import { Injectable, signal } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { tap } from 'rxjs/operators';
+import { map, tap } from 'rxjs/operators';
 import { environment } from '../../environments/environment';
 
 const TOKEN_KEY = 'babyapp_access_token';
 
 export type LoginResponse = {
-  accessToken: string;
+  accessToken?: string;
   refreshToken?: string;
   expiresIn?: number;
   tokenType?: string;
@@ -37,11 +37,18 @@ export class AuthService {
   }
 
   login(email: string, password: string) {
-    const url = `${environment.apiBaseUrl}/login`;
+    const url = `${environment.apiBaseUrl}/login?useCookies=false&useSessionCookies=false`;
     return this.http.post<LoginResponse>(url, { email, password }).pipe(
-      tap((res) => {
-        localStorage.setItem(TOKEN_KEY, res.accessToken);
-        this.token.set(res.accessToken);
+      map((res) => {
+        const accessToken = res?.accessToken?.trim();
+        if (!accessToken) {
+          throw new Error('Login response nije vratio access token.');
+        }
+        return accessToken;
+      }),
+      tap((accessToken) => {
+        localStorage.setItem(TOKEN_KEY, accessToken);
+        this.token.set(accessToken);
       }),
     );
   }

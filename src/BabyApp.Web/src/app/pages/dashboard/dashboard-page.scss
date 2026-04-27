@@ -1,36 +1,49 @@
 .card {
-  border: 1px solid #e5e7eb;
-  border-radius: 0.75rem;
-  padding: 1rem 1.1rem;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  padding: 1.15rem 1.25rem;
   margin-bottom: 1rem;
-  background: #fff;
+  background: var(--color-surface);
+  box-shadow: var(--shadow-sm);
 }
 
 h1 {
   margin: 0 0 0.35rem;
-  font-size: 1.35rem;
+  font-size: 1.45rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  color: var(--color-text);
 }
 
 h2 {
-  margin: 0 0 0.5rem;
-  font-size: 1.05rem;
+  margin: 0 0 0.55rem;
+  font-size: 1.08rem;
+  font-weight: 700;
+  color: var(--color-text);
 }
 
 .meta {
-  color: #4b5563;
+  color: var(--color-text-muted);
   margin: 0 0 0.5rem;
+  font-size: 0.9375rem;
 }
 
 .hint {
-  color: #6b7280;
+  color: var(--color-text-muted);
   font-size: 0.875rem;
+  margin-top: 0.5rem;
 }
 
 .error {
-  color: #b91c1c;
+  color: var(--color-danger);
 }
 
 ul {
   margin: 0;
   padding-left: 1.2rem;
+  color: var(--color-text);
+}
+
+li {
+  margin-bottom: 0.25rem;
 }

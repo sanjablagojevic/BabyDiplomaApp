@@ -42,10 +42,15 @@ export type NapPlanDto = {
   napCount: number;
   typicalNapLengthsMinutes: number[];
   suggestedWakeWindowMinutes: number;
+  wakeWindowMinMinutes: number;
+  wakeWindowMaxMinutes: number;
+  wakeWindowBandLabel: string;
   bedtimeWindowHint: string;
   suggestedBedtimeStartLocal: string;
   notes: string;
   naps: { order: number; suggestedStartLocal: string; typicalDurationMinutes: number }[];
+  lastSleepEndUtc: string | null;
+  isBabyAsleepNow: boolean;
 };
 
 @Injectable({ providedIn: 'root' })

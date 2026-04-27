@@ -1,11 +1,11 @@
 import { Component, inject, OnDestroy, OnInit } from '@angular/core';
-import { ActivatedRoute, ParamMap, RouterLink, RouterOutlet } from '@angular/router';
+import { ActivatedRoute, ParamMap, RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { BabyContextService } from '../../core/baby-context.service';
 
 @Component({
   selector: 'app-baby-shell',
-  imports: [RouterLink, RouterOutlet],
+  imports: [RouterLink, RouterLinkActive, RouterOutlet],
   templateUrl: './baby-shell.html',
   styleUrl: './baby-shell.scss',
 })

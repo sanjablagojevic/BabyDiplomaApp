@@ -1,5 +1,5 @@
 .muted {
-  color: #6b7280;
+  color: var(--color-text-muted);
   font-size: 0.875rem;
 }
 
@@ -19,6 +19,6 @@ label {
 }
 
 .del {
-  color: #b91c1c;
+  color: var(--color-danger);
   margin-left: 0.35rem;
 }

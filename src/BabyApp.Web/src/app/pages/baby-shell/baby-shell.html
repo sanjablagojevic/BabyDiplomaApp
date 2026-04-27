@@ -1,20 +1,24 @@
 <div class="shell">
   <header class="bar">
-    <a routerLink="/babies" class="back">← Bebe</a>
-    <nav>
-      <a [routerLink]="['/baby', babyId, 'dashboard']">Pregled</a>
-      <a [routerLink]="['/baby', babyId, 'sleep']">San</a>
-      <a [routerLink]="['/baby', babyId, 'feeding']">Hrana</a>
-      <a [routerLink]="['/baby', babyId, 'recipes']">Recepti</a>
-      <a [routerLink]="['/baby', babyId, 'reactions']">Reakcije</a>
-      <a [routerLink]="['/baby', babyId, 'growth']">Rast</a>
-      <a [routerLink]="['/baby', babyId, 'milestones']">Prekretnice</a>
-      <a [routerLink]="['/baby', babyId, 'reminders']">Podsjetnici</a>
-      <a [routerLink]="['/baby', babyId, 'insights']">Uvidi</a>
+    <a routerLink="/babies" class="back" title="Natrag na popis beba">← Bebe</a>
+    <nav class="nav-pills" aria-label="Moduli za odabranu bebu">
+      <a
+        [routerLink]="['/baby', babyId, 'dashboard']"
+        routerLinkActive="is-active"
+        [routerLinkActiveOptions]="{ exact: true }"
+        >Pregled</a>
+      <a [routerLink]="['/baby', babyId, 'sleep']" routerLinkActive="is-active">San</a>
+      <a [routerLink]="['/baby', babyId, 'feeding']" routerLinkActive="is-active">Hrana</a>
+      <a [routerLink]="['/baby', babyId, 'recipes']" routerLinkActive="is-active">Recepti</a>
+      <a [routerLink]="['/baby', babyId, 'reactions']" routerLinkActive="is-active">Reakcije</a>
+      <a [routerLink]="['/baby', babyId, 'growth']" routerLinkActive="is-active">Rast</a>
+      <a [routerLink]="['/baby', babyId, 'milestones']" routerLinkActive="is-active">Prekretnice</a>
+      <a [routerLink]="['/baby', babyId, 'reminders']" routerLinkActive="is-active">Podsjetnici</a>
+      <a [routerLink]="['/baby', babyId, 'insights']" routerLinkActive="is-active">Uvidi</a>
     </nav>
     <a routerLink="/education" class="edu">Savjeti</a>
   </header>
-  <main>
+  <main class="shell-main">
     <router-outlet />
   </main>
 </div>
